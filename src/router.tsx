@@ -3,6 +3,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import PluginList from './pages/PluginList';
 import PluginDetail from './pages/PluginDetail';
 import PluginManagement from './pages/admin/PluginManagement';
+import Login from './pages/admin/Login';
+import RequireAuth from './components/auth/RequireAuth';
 
 const router = createBrowserRouter([
   {
@@ -14,8 +16,12 @@ const router = createBrowserRouter([
     element: <PluginDetail />,
   },
   {
+    path: '/admin/login',
+    element: <Login />
+  },
+  {
     path: '/admin/plugins',
-    element: <PluginManagement />,
+    element: <RequireAuth><PluginManagement /></RequireAuth>,
   },
 ]);
 

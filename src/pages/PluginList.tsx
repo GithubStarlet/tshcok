@@ -35,34 +35,9 @@ const PluginList: React.FC = () => {
     );
   }
 
-  // 初始数据仅用于开发参考
-  const mockPlugins: Plugin[] = [
-    {
-      id: '1',
-      title: 'AIChatPlugin AI聊天插件',
-      description: '它允许玩家通过聊天与一个 AI 对话系统进行互动；该插件提供了一个简单的接口，使得玩家可以通过特定的命令或聊天触发词来向 AI 提出问题，并接收回答。',
-      imageUrl: 'https://via.placeholder.com/300',
-      downloadUrl: 'https://example.com/download/1',
-      instructions: '使用说明...',
-      createdAt: '2024-02-20',
-      updatedAt: '2024-02-20'
-    },
-    {
-      id: '2',
-      title: 'AdditionalPylons 放置更多晶塔权',
-      description: '自定义晶塔可放置的数量，至少为一个，且所有晶塔都无视环境',
-      imageUrl: 'https://via.placeholder.com/300',
-      downloadUrl: 'https://example.com/download/1',
-      instructions: '使用说明...',
-      createdAt: '2024-02-20',
-      updatedAt: '2024-02-20'
-    },
-    // 可以添加更多示例数据
-  ];
-
   return (
     <div className="container">
-      <h1 style={{ marginBottom: '24px' }}>游戏插件市场</h1>
+      <h1 style={{ marginBottom: '24px' }}>Tshock插件市场</h1>
       <Row gutter={[16, 16]} style={{ width: '100%' }}>
         {plugins.map((plugin) => (
           <Col xs={24} sm={12} md={8} lg={6} key={plugin.id}>

@@ -1,16 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PluginList from './pages/PluginList';
-import PluginDetail from './pages/PluginDetail';
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<PluginList />} />
-        <Route path="/plugin/:id" element={<PluginDetail />} />
-      </Routes>
-    </Router>
+    <RouterProvider router={router} />
   );
 };
 

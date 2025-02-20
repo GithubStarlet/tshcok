@@ -1,35 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, Button, Descriptions, Typography } from 'antd';
+import { Card, Button, Descriptions, Typography, message } from 'antd';
 import { PictureOutlined } from '@ant-design/icons';
 import { Plugin } from '../types';
+import { getPlugin } from '../services/api';
 
 const { Title, Paragraph } = Typography;
 
-// 模拟数据
-const mockPlugin: Plugin = {
-  id: '1',
-  title: '示例插件1',
-  description: '这是一个示例插件的详细描述',
-  imageUrl: 'https://via.placeholder.com/600x300',
-  downloadUrl: 'https://example.com/download/1',
-  instructions: '1. 下载插件文件\n2. 解压到游戏目录\n3. 启动游戏即可使用',
-  createdAt: '2024-02-20',
-  updatedAt: '2024-02-20'
-};
-
 const PluginDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [plugin, setPlugin] = useState<Plugin | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPluginDetail = async () => {
+      if (!id) return;
+      try {
+        const data = await getPlugin(id);
+        setPlugin(data);
+      } catch (error) {
+        message.error('获取插件详情失败');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPluginDetail();
+  }, [id]);
+
+  if (loading) {
+    return <div>加载中...</div>;
+  }
+
+  if (!plugin) {
+    return <div>未找到插件</div>;
+  }
 
   return (
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
       <Card
+        loading={loading}
         cover={
           <div style={{ height: '400px', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {mockPlugin.imageUrl ? (
+            {plugin.imageUrl ? (
               <img
-                alt={mockPlugin.title}
-                src={mockPlugin.imageUrl}
+                alt={plugin.title}
+                src={plugin.imageUrl}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -43,29 +59,29 @@ const PluginDetail: React.FC = () => {
               style={{
                 fontSize: '64px',
                 color: '#d9d9d9',
-                display: mockPlugin.imageUrl ? 'none' : 'block',
+                display: plugin.imageUrl ? 'none' : 'block',
               }}
             />
           </div>
         }
         actions={[
-          <Button type="primary" key="download" href={mockPlugin.downloadUrl} target="_blank" size="small" style={{ minWidth: '80px', padding: '0.6em 1em' }}>
+          <Button type="primary" key="download" href={plugin.downloadUrl} target="_blank" size="small" style={{ minWidth: '80px', padding: '0.6em 1em' }}>
             下载插件
           </Button>
         ]}
       >
-        <Title level={2}>{mockPlugin.title}</Title>
+        <Title level={2}>{plugin.title}</Title>
         <Descriptions column={1} style={{ marginBottom: '24px' }}>
-          <Descriptions.Item label="更新时间">{mockPlugin.updatedAt}</Descriptions.Item>
-          <Descriptions.Item label="创建时间">{mockPlugin.createdAt}</Descriptions.Item>
+          <Descriptions.Item label="更新时间">{plugin.updatedAt}</Descriptions.Item>
+          <Descriptions.Item label="创建时间">{plugin.createdAt}</Descriptions.Item>
         </Descriptions>
 
         <Title level={3}>插件描述</Title>
-        <Paragraph>{mockPlugin.description}</Paragraph>
+        <Paragraph>{plugin.description}</Paragraph>
 
         <Title level={3}>使用说明</Title>
         <Paragraph>
-          {mockPlugin.instructions.split('\n').map((line, index) => (
+          {plugin.instructions.split('\n').map((line, index) => (
             <div key={index}>{line}</div>
           ))}
         </Paragraph>
